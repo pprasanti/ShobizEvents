@@ -1,0 +1,34 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Node Server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/pprasanti/ShobizEvents.git"
+  },
+  "keywords": [
+    "node",
+    "express"
+  ],
+  "author": "Prasanti Prusty",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pprasanti/ShobizEvents/issues"
+  },
+  "homepage": "https://github.com/pprasanti/ShobizEvents#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.33.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5"
+  },
+  "type": "module"
+}
