@@ -1,8 +1,10 @@
 import express from 'express'; // Add {"type": "module"} to package.json for node18
 import cors from 'cors';
 import 'dotenv/config';
-import middleware from './src/middleware/index.js';
+import middleware from './src/middleware/firebase-middleware.js';
+import dbConnect from './src/database.js';
 
+dbConnect();
 
 const app = express();
 
