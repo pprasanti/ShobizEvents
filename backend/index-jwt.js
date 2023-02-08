@@ -60,7 +60,7 @@ const filePath = path.join(__dirname, process.env.STORY_FOLDER, 'test.txt');
 
 app.get('/contacts', (req, res) => {
   const contactsDtls = contacts.map(o => ({ id: o.id, name: o.name, email: o.email }));
-  res.json(contactsDtls);
+  res.status(200).json({ data: contactsDtls});
 });
 
 app.get('/story', (req, res) => {
@@ -198,6 +198,6 @@ function checkUserAndGenerateToken(data, req, res) {
     })
 }
 
-const server = app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, () => {
   console.log('Server started on port ' + process.env.PORT);
 });

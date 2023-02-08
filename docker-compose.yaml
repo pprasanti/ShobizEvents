@@ -1,42 +1,61 @@
 version: "3"
 services:
   backend:
-    container_name: backend_api
+    container_name: backend
     image: prasanti85/nodejs:latest
     # build: ./backend
     volumes:
-      - event-backend:/app
+      # - event-backend:/app
       - ./backend:/app
       - /app/node_modules
     ports:
-      - 8040:80
-    networks:
-      - doc-net
+      - 8040:8040
+    # networks:
+    #   - doc-net
+    # command: npm run dev
+
+  contacts:
+    container_name: contacts
+    image: prasanti85/nodejs2:latest
+    # build: ./contacts
+    volumes:
+      # - event-backend2:/app
+      - ./contacts:/app
+      # - /app/node_modules
+    environment:
+      - BACKEND_SERVICE_SERVICE_HOST=host.docker.internal:8040
+    ports:
+      - 8020:8020
+    # networks:
+    #   - doc-net
     command: npm run dev
 
   frontend:
-    container_name: frontend_ui
-    image: prasanti85/reactjs:dev
-    pull_policy: always
-    # build: ./frontend
-    environment:
-      REACT_APP_NODE_SERVER: localhost
-      REACT_APP_NODE_SERVER1: backend
+    container_name: frontend
+    # image: prasanti85/reactjs-dev
+    # pull_policy: always
+    build: ./frontend
+    # environment:
+      # REACT_APP_NODE_SERVER: localhost
+      # REACT_APP_NODE_SERVER1: backend
+      # - BACKEND_SERVICE_SERVICE_HOST=host.docker.internal:8040
     volumes:
       - event-frontend:/app
       - ./frontend:/app
       - /app/node_modules
     ports:
-      - 80:8000
-    networks:
-      - doc-net
+      - 8010:8010
+    # networks:
+    #   - doc-net
     # command: npm run start
     depends_on:
       - backend
 
 volumes:
-  event-backend:
-    driver: local
+  # event-backend:
+  #   driver: local
+  # event-backend2:
+  #   driver: local
   event-frontend:
     driver: local
 

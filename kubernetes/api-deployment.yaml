@@ -3,46 +3,45 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ui-shobiz-service
+  name: backend-service
 spec:
   selector:
-    app: ui-shobiz-pod
+    app: backend
+  type: ClusterIP
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
       # port: 443
       # targetPort: 443
-  type: LoadBalancer
 
 ---
 # deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ui-shobiz-deployment
+  name: backend-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ui-shobiz-pod
+      app: backend
       # tier: backend
     # matchExpression:
     #   - {key: app, operator: In, value: [shobiz-pod]}
   template:
     metadata:
       labels:
-        app: ui-shobiz-pod
+        app: backend
         # tier: backend
     spec:
       containers:
-        - name: frontend
-          image: prasanti85/reactjs-prod:latest
-          imagePullPolicy: Always
-          env:
-            - name: REACT_APP_NODE_SERVER
-              # value: '10.110.17.142'
-              value: 'ui-shobiz-service.default'
+        - name: backend
+          image: prasanti85/nodejs:latest
+          # imagePullPolicy: Always
+          # env:
+            # - name: REACT_APP_NODE_SERVER
+            #   value: '127.0.0.1:53989'
           resources:
             limits:
               memory: "128Mi"

@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 8020
 
-CMD ["node", "index-jwt.js"]
+CMD [ "node", "index.js" ]

@@ -30,13 +30,13 @@ export default class Login extends React.Component {
 
     // const pwd = bcrypt.hashSync(this.state.password, salt);
     const pwd = this.state.password;
-    console.log(`process.env.REACT_APP_NODE_SERVER : ${process.env.REACT_APP_NODE_SERVER}`)
-    console.log(`process.env.API_SHOBIZ_SERVICE_SERVICE_HOST : ${process.env.API_SHOBIZ_SERVICE_SERVICE_HOST}`)
-    console.log(`process.env.UI_SHOBIZ_SERVICE_SERVICE_HOST : ${process.env.UI_SHOBIZ_SERVICE_SERVICE_HOST}`)
     
-    const backendUrl = process.env.REACT_APP_NODE_SERVER ?? 'localhost'
-
-    axios.post(`http://${backendUrl}/login`, {
+    const backendUrl = process.env.BACKEND_SERVICE_SERVICE_HOST ?? '127.0.0.1:50228'
+    console.log(`process.env.BACKEND_SERVICE_SERVICE_HOST : ${process.env.BACKEND_SERVICE_SERVICE_HOST}`)
+    console.log(`process.env.FRONTEND_SERVICE_SERVICE_HOST : ${process.env.FRONTEND_SERVICE_SERVICE_HOST}`)
+    console.log(`backendUrl : ${backendUrl}`)
+    
+    axios.post('/api/login', {
       username: this.state.username,
       password: pwd,
     }).then((res) => {

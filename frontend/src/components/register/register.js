@@ -17,24 +17,22 @@ export default class Register extends React.Component {
 
 
   register = () => {
-    console.log('process.env.NODE_ENV : ' + process.env.NODE_ENV);
-    const backendUrl = process.env.REACT_APP_NODE_SERVER ?? 'localhost'
-
-    axios.post(`http://${backendUrl}/register`, {
+    const backendUrl = process.env.BACKEND_SERVICE_SERVICE_HOST ?? 'backend-service.default:8040'
+    console.log(`process.env.BACKEND_SERVICE_SERVICE_HOST : ${process.env.BACKEND_SERVICE_SERVICE_HOST}`)
+    console.log(`process.env.FRONTEND_SERVICE_SERVICE_HOST : ${process.env.FRONTEND_SERVICE_SERVICE_HOST}`)
+    console.log(`backendUrl : ${backendUrl}`)
+    
+    axios.post(`/api/register`, {
       username: this.state.username,
       password: this.state.password,
     }).then((res) => {
-      console.log('Hiiiiiiii')
-      alert('Hiiiiiiii')
       swal({
         text: res.data.title,
         icon: "success",
         type: "success"
       });
-      this.props.history.push('/');
+      this.props.history.push('/dashboard');
     }).catch((err) => {
-      console.log('gggggg')
-      alert('gggggg')
       swal({
         text: err.response.data.errorMessage,
         icon: "error",

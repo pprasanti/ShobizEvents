@@ -3,48 +3,50 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: api-shobiz-service
+  name: frontend-service
 spec:
   selector:
-    app: api-shobiz-pod
+    app: frontend
+  type: LoadBalancer
   ports:
     - protocol: TCP
-      port: 8040
-      targetPort: 8040
+      port: 80
+      targetPort: 80
       # port: 443
       # targetPort: 443
-  type: LoadBalancer
 
 ---
 # deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-shobiz-deployment
+  name: frontend-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api-shobiz-pod
+      app: frontend
       # tier: backend
     # matchExpression:
     #   - {key: app, operator: In, value: [shobiz-pod]}
   template:
     metadata:
       labels:
-        app: api-shobiz-pod
+        app: frontend
         # tier: backend
     spec:
       containers:
-        - name: backend
-          image: prasanti85/nodejs:latest
+        - name: frontend
+          image: prasanti85/reactjs-prod:latest
           # imagePullPolicy: Always
-          # env:
-            # - name: REACT_APP_NODE_SERVER
-            #   value: '127.0.0.1:53989'
+          env:
+            - name: BACKEND_SERVICE_SERVICE_HOST
+              # value: "10.96.92.87"
+              # value: "192.168.49.2:31801"
+              value: "backend-service.default"
           resources:
             limits:
-              memory: "128Mi"
+              memory: "512Mi"
               cpu: "500m"
 
       

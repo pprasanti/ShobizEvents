@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:14-alpine
 
 WORKDIR /app
 
@@ -8,6 +8,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 8040
+EXPOSE 80
 
 CMD ["node", "index-jwt.js"]
