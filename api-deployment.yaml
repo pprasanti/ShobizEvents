@@ -1,0 +1,57 @@
+# service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-shobiz-service
+spec:
+  selector:
+    app: api-shobiz-pod
+  ports:
+    - protocol: TCP
+      port: 8040
+      targetPort: 8040
+      # port: 443
+      # targetPort: 443
+  type: LoadBalancer
+
+---
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-shobiz-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-shobiz-pod
+      # tier: backend
+    # matchExpression:
+    #   - {key: app, operator: In, value: [shobiz-pod]}
+  template:
+    metadata:
+      labels:
+        app: api-shobiz-pod
+        # tier: backend
+    spec:
+      containers:
+        - name: backend
+          image: prasanti85/nodejs:latest
+          # imagePullPolicy: Always
+          # env:
+            # - name: REACT_APP_NODE_SERVER
+            #   value: '127.0.0.1:53989'
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+
+      
+
+# ---
+# # kubectl apply -f=master-deployment.yaml
+# # minikube service shobiz-service
+# # minikube dashboard
+# # kubectl delete -f=master-deployment.yaml
+# # kubectl delete deployments,services -l group=example

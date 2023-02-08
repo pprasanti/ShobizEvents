@@ -8,6 +8,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 5001
+EXPOSE 8010
 
-CMD ["node", "index-jwt.js"]
+CMD ["npm", "start"]

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: showbiz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: showbiz-pod
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: showbiz-pod
+        tier: backend
+    spec:
+      containers:
+      - name: learn-node
+        image: prasanti85/learn:kub-node-backend1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5001
+
+# kubectl apply -f=deployment.yaml
+# kubectl apply -f=service.yaml
+# minikube service showbiz-service
+# minikube dashboard
+# kubectl delete -f=deployment.yaml -f=service.yaml

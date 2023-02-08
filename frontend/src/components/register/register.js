@@ -15,10 +15,12 @@ export default class Register extends React.Component {
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
-  
-  register = () => {
 
-    axios.post('http://localhost:5001/register', {
+  register = () => {
+    console.log('process.env.NODE_ENV : ' + process.env.NODE_ENV);
+    const backendUrl = process.env.REACT_APP_NODE_SERVER ?? 'localhost'
+
+    axios.post(`http://${backendUrl}/register`, {
       username: this.state.username,
       password: this.state.password,
     }).then((res) => {
@@ -33,7 +35,7 @@ export default class Register extends React.Component {
     }).catch((err) => {
       console.log('gggggg')
       alert('gggggg')
-       swal({
+      swal({
         text: err.response.data.errorMessage,
         icon: "error",
         type: "error"

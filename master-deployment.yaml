@@ -1,0 +1,153 @@
+# service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: shobiz-service
+  labels: 
+    group: example
+spec:
+  selector:
+    app: shobiz-pod
+  ports:
+    - protocol: TCP
+      port: 8060
+      targetPort: 8060
+      # port: 443
+      # targetPort: 443
+  type: LoadBalancer
+
+---
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shobiz-deployment
+  labels: 
+    group: example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shobiz-pod
+      # tier: backend
+    # matchExpression:
+    #   - {key: app, operator: In, value: [shobiz-pod]}
+  template:
+    metadata:
+      labels:
+        app: shobiz-pod
+        # tier: backend
+    spec:
+      containers:
+        - name: backend
+          image: prasanti85/nodejs:latest
+          imagePullPolicy: Always
+          env:
+            - name: STORY_FOLDER
+              # value: 'story'
+              valueFrom:
+                configMapKeyRef:
+                  name: data-store-env
+                  key: folder
+          volumeMounts:
+            - mountPath: /app/story
+              name: kevent-backend
+          # livenessProbe: 
+          #   httpGet:
+          #     path: /story
+          #     port: 80
+          #   periodSeconds: 10
+          #   initialDelaySeconds: 5
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          # ports:
+          #   - containerPort: 80
+          #     name: backend-cont
+        # - name: frontend
+        #   image: prasanti85/reactjs:nginx-prod
+        #   imagePullPolicy: Always
+        #   env:
+        #     - name: REACT_APP_NODE_SERVER
+        #       value: localhost
+        #   livenessProbe: 
+        #     httpGet:
+        #       path: /
+        #       port: 8000
+        #     periodSeconds: 10
+        #     initialDelaySeconds: 5
+        #   resources:
+        #     limits:
+        #       memory: "128Mi"
+        #       cpu: "500m"
+        #   # ports:
+        #   #   - containerPort: 8000
+        #   #     name: frontend-cont
+      
+      volumes:
+        - name: kevent-backend
+          # same pod
+          # hostPath:
+          #   path: /data
+          #   type: DirectoryOrCreate
+          # emptyDir: {}
+          persistentVolumeClaim:
+            claimName: host-pvc
+
+---
+# environment.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: data-store-env
+data:
+  folder: 'story'
+  # key: value
+
+---
+# host-pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: host-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  # persistentVolumeReclaimPolicy: Recycle
+  storageClassName: standard
+  # mountOptions:
+  #   - hard
+  #   - nfsvers=4.1
+  # nfs:
+  #   path: /tmp
+  #   server: 172.17.0.2
+  hostPath:
+    path: /data
+    type: DirectoryOrCreate
+
+---
+# host-pvc.yaml claim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: host-pvc
+spec:
+  volumeName: host-pv
+  resources:
+    requests:
+      storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+
+---
+# kubectl apply -f=master-deployment.yaml
+# minikube service shobiz-service
+# minikube dashboard
+# kubectl delete -f=master-deployment.yaml
+# kubectl delete deployments,services -l group=example

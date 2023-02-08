@@ -14,7 +14,6 @@ import { Button, TextField, Link } from '@mui/material';
 import axios from 'axios';
 // const bcrypt = require('bcryptjs');
 // var salt = bcrypt.genSaltSync(10);
-// const axios = require('axios');
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -31,8 +30,13 @@ export default class Login extends React.Component {
 
     // const pwd = bcrypt.hashSync(this.state.password, salt);
     const pwd = this.state.password;
+    console.log(`process.env.REACT_APP_NODE_SERVER : ${process.env.REACT_APP_NODE_SERVER}`)
+    console.log(`process.env.API_SHOBIZ_SERVICE_SERVICE_HOST : ${process.env.API_SHOBIZ_SERVICE_SERVICE_HOST}`)
+    console.log(`process.env.UI_SHOBIZ_SERVICE_SERVICE_HOST : ${process.env.UI_SHOBIZ_SERVICE_SERVICE_HOST}`)
+    
+    const backendUrl = process.env.REACT_APP_NODE_SERVER ?? 'localhost'
 
-    axios.post('http://localhost:5001/login', {
+    axios.post(`http://${backendUrl}/login`, {
       username: this.state.username,
       password: pwd,
     }).then((res) => {

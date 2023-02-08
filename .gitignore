@@ -1,4 +1,6 @@
 backend/src/config/ServiceAccount.json
+backend/package-lock.json
+frontend/package-lock.json
 
 # Logs
 logs
@@ -104,4 +106,3 @@ dist
 
 # TernJS port file
 .tern-port
-frontend/package-lock.json

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: showbiz-service
+spec:
+  selector:
+    app: showbiz-pod
+  ports:
+    - port: 80
+      targetPort: 5001
+    # - protocols: 'TCP'
+    #   port: 443
+    #   targetPort: 443
+  type: LoadBalancer
+
+# kubectl apply -f=deployment.yaml
+# kubectl apply -f=service.yaml
+# minikube service showbiz-service
+# minikube dashboard
+# kubectl delete -f=deployment.yaml -f=service.yaml
